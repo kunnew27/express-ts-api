@@ -18,12 +18,15 @@ const openApiSpec = {
       User: {
         type: "object",
         properties: {
-          _id: { type: "string", example: "665f1b2c3a4e5f6789abcdef" },
-          name: { type: "string", example: "John Doe" },
-          email: {
-            type: "string",
-            format: "email",
-            example: "john@example.com",
+          _id:     { type: "string", example: "665f1b2c3a4e5f6789abcdef" },
+          name:    { type: "string", example: "John Doe" },
+          email:   { type: "string", format: "email", example: "john@example.com" },
+          profile: {
+            type: "object",
+            properties: {
+              avatar:   { type: "string", example: "uploads/avatars/1726490123-456.jpg", description: "Relative path served to clients; empty string if none" },
+              avatarId: { type: "string", example: "1726490123-456.jpg", description: "Original filename used internally to locate and delete the file" },
+            },
           },
           createdAt: { type: "string", format: "date-time" },
           updatedAt: { type: "string", format: "date-time" },
@@ -405,28 +408,16 @@ const openApiSpec = {
         requestBody: {
           required: true,
           content: {
-            "application/json": {
+            "multipart/form-data": {
               schema: {
                 type: "object",
                 required: ["name", "email", "password"],
                 properties: {
-                  name: { type: "string", minLength: 2, example: "Jane Smith" },
-                  email: {
-                    type: "string",
-                    format: "email",
-                    example: "jane@example.com",
-                  },
-                  password: {
-                    type: "string",
-                    minLength: 6,
-                    example: "secret123",
-                  },
-                  role: {
-                    type: "string",
-                    enum: ["super_admin", "admin", "user"],
-                    default: "user",
-                    example: "admin",
-                  },
+                  name:     { type: "string", minLength: 2, example: "Jane Smith" },
+                  email:    { type: "string", format: "email", example: "jane@example.com" },
+                  password: { type: "string", minLength: 6, example: "secret123" },
+                  role:     { type: "string", enum: ["super_admin", "admin", "user"], default: "user", example: "admin" },
+                  avatar:   { type: "string", format: "binary", description: "Optional avatar image (jpeg/png/gif/webp, max 2 MB)" },
                 },
               },
             },
@@ -638,16 +629,13 @@ const openApiSpec = {
         ],
         requestBody: {
           content: {
-            "application/json": {
+            "multipart/form-data": {
               schema: {
                 type: "object",
                 properties: {
-                  name: { type: "string", example: "New Name" },
-                  email: {
-                    type: "string",
-                    format: "email",
-                    example: "new@example.com",
-                  },
+                  name:   { type: "string", example: "New Name" },
+                  email:  { type: "string", format: "email", example: "new@example.com" },
+                  avatar: { type: "string", format: "binary", description: "Optional new avatar image (jpeg/png/gif/webp, max 2 MB). Replaces the existing one." },
                 },
               },
             },

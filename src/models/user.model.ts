@@ -1,6 +1,11 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 import bcrypt from "bcryptjs";
 
+export interface IProfile {
+  avatar?:   string; // relative path served to clients
+  avatarId?: string; // original filename — used to locate & delete the file
+}
+
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -9,6 +14,7 @@ export interface IUser extends Document {
   access_token?: string;
   refresh_token?: string;
   role?: mongoose.Types.ObjectId | null;
+  profile: IProfile;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidate: string): Promise<boolean>;
@@ -36,7 +42,11 @@ const userSchema = new Schema<IUser>(
     },
     access_token: { type: String, select: false },
     refresh_token: { type: String, select: false },
-    role: { type: Schema.Types.ObjectId, ref: "Role", default: null },
+    role:    { type: Schema.Types.ObjectId, ref: 'Role', default: null },
+    profile: {
+      avatar:   { type: String, default: '' },
+      avatarId: { type: String, default: '' }, // filename only, e.g. "1726490123-456.jpg"
+    },
   },
   {
     timestamps: true,
