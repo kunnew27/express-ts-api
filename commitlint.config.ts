@@ -17,6 +17,7 @@ export default {
         'ci',        // CI/CD configuration
         'build',     // build system changes
         'revert',    // revert a previous commit
+        'wip',       // work in progress (not ready for review)
       ],
     ],
     'type-case':         [2, 'always', 'lower-case'],
